@@ -47,7 +47,19 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    let socket = new BITBOX.Socket({
+      callback: () => {
+        console.log('websocket is connected')
+      }, restURL: 'https://rest.bitcoin.com'})
+
+
+    socket.listen('transactions', (message) => {
+      console.log(message)
+    })
+
+    // Begin default scaffold stuff
     BITBOX.Address.utxo(cashAddress).then(
       result => {
         if (!result[0]) {
